@@ -8,3 +8,5 @@
 ## 2.javascript的基本数据类型
 - 8种数据类型：**null**、**undefined**、**string**、 **bigint**、**number**、**boolean**、**symbol**、**object**
 - 包装对象的概念：为什么字符串变量可以调用属性和方法，属性和方法不是只有对象才拥有吗？其实这都是调用了包装对象中的属性和方法，当字符串变量调用方法时会隐式的通多`new String()`创建对象，然后调用对应的属性和方法，属性和方法执行完毕后立即销毁该对象。
+- 数据类型判断：
+  - typeof: 使用typeof判断数据类型不是很明智选择如 `typeof null // Object`
