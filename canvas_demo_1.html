@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    html, body{
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+    }
+    #canvas_1{
+      width: 100%;
+      height: 100%;
+      background: #2d3c40;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas_1"></canvas>
+</body>
+<script>
+  const canvas = document.getElementById('canvas_1') // 获取canvas
+
+  const ctx = canvas.getContext('2d') // 将画布设置为2d
+  let viewWidth = 0
+  let viewHeight = 0
+  setCanvasSize()
+
+  // 监听窗口
+  addEventListener('resize', () => {
+    setCanvasSize()
+  }, false)
+  
+  // 设置canvas大小函数
+  function setCanvasSize() {
+    // 获取视口的宽度和高度
+    viewWidth = document.documentElement.clientWidth || document.body.clientWidth
+    viewHeight = document.documentElement.clientHeight || document.body.clientHeight
+
+    // 设置canvas大小
+    canvas.width = viewWidth
+    canvas.height = viewHeight
+  }
+  
+  // 设置图形和线条颜色
+  ctx.fillStyle = 'white'
+  ctx.strokerStyle = 'white'
+  class Star {
+    constructor(x, y, r) {
+      // x,y 是坐标， r是半径
+      this.x = x
+      this.y = y
+      this.r = r
+      // speed参数在 -3 ~ 3之间取值
+      this.speedX = (Math.random() * 3) * Math.pow(-1, Math.round(Math.random()))
+      this.speedY = (Math.random() * 3) * Math.pow(-1, Math.round(Math.random()))
+    }
+    draw() {
+      ctx.beginPath()
+      ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2)
+      ctx.fill()
+      ctx.closePath()
+    }
+    move() {
+      this.x -= this.speedX
+      this.y -= this.speedY
+      // 碰到边界时， 反弹， 只需要把speed取反就可以了
+      if (this.x < 0 || this.x > viewWidth) this.speedX *= -1
+      if (this.y < 0 || this.y > viewHeight) this.speedY *= -1
+    }
+  }
+
+  const stars = []
+
+  for (let i = 0; i < 100; i++) {
+    stars.push(new Star(Math.random() * viewWidth, Math.random() * viewHeight, 3))
+  }
+
+  const raf = () => {
+    ctx.clearRect(0, 0, viewWidth, viewHeight)
+    stars.forEach(item => {
+      item.move()
+      item.draw()
+    })
+    requestAnimationFrame(raf)
+  }
+  requestAnimationFrame(raf)
+</script>
+</html>
